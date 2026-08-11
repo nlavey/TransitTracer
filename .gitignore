@@ -1,0 +1,24 @@
+# Virtual environment
+venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated data
+data/processed/
+
+# Large/raw datasets
+data/raw/*.zip
+data/raw/*.txt
