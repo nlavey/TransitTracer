@@ -1,5 +1,6 @@
 import psycopg2
 from psycopg2 import sql
+import math
 
 
 def get_existing_columns(cursor, table_name):
@@ -44,6 +45,7 @@ def add_missing_columns(cursor, table_name, columns):
 def load_dataframe(cursor, table_name, df, conflict_columns):
     """
     Add missing columns and insert/update DataFrame rows.
+    Missing pandas NaN values are converted to SQL NULL.
     """
 
     # Make sure every DataFrame column exists in the database
@@ -121,7 +123,14 @@ def load_dataframe(cursor, table_name, df, conflict_columns):
 
     # Insert each row
     for row in df.itertuples(index=False, name=None):
-        cursor.execute(query, row)
+
+        # Convert pandas NaN → Python None → PostgreSQL NULL
+        cleaned_row = tuple(
+            None if (isinstance(value, float) and math.isnan(value)) else value
+            for value in row
+        )
+
+        cursor.execute(query, cleaned_row)
 
 
 # --------------------------------------------------

@@ -1,6 +1,12 @@
-from database.connection import get_connection
+import sys
+from pathlib import Path
 
-from etl.extract import (
+# Add project root to path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+from src.database.connection import get_connection
+
+from src.etl.extract import (
     extract_agency,
     extract_routes,
     extract_stops,
@@ -8,9 +14,9 @@ from etl.extract import (
     extract_stop_times
 )
 
-from etl.transform import transform
+from src.etl.transform import transform
 
-from etl.load import (
+from src.etl.load import (
     load_agency,
     load_routes,
     load_stops,
