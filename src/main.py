@@ -1,26 +1,43 @@
+# src/main.py
+
+from database.connection import get_connection
+
 from etl.extract import extract_agency
-from etl.transform import clean_agency
+from etl.transform import transform
 from etl.load import load_agency
 
 
-def main():
-    
-    # Extract
-    agency = extract_agency()
+AGENCY_FILE = "data/agency.txt"
 
-    print("Extracted agency data:")
-    print(agency)
+
+def main():
+
+    # Extract
+    agency_df = extract_agency()
 
     # Transform
-    agency = clean_agency(agency)
-
-    print("\nCleaned agency data:")
-    print(agency)
+    agency_df = transform(agency_df)
 
     # Load
-    load_agency(agency)
+    connection = get_connection()
 
-    print("\nAgency data loaded successfully!")
+    try:
+        cursor = connection.cursor()
+
+        load_agency(cursor, agency_df)
+
+        connection.commit()
+
+        print("Agency data loaded successfully.")
+
+    except Exception as e:
+        connection.rollback()
+        print(f"Error loading agency data: {e}")
+        raise
+
+    finally:
+        cursor.close()
+        connection.close()
 
 
 if __name__ == "__main__":
