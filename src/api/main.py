@@ -1,8 +1,10 @@
 from fastapi import FastAPI, Query
 from src.database.connection import get_connection
+from src.api import analytics
 
 app = FastAPI()
 
+app.include_router(analytics.router)
 
 @app.get("/health/db")
 def database_health_check():
