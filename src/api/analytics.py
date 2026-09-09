@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from src.database.connection import get_connection
 
 router = APIRouter(
@@ -130,6 +130,17 @@ def route_statistics(route_id: str):
 
     try:
         cursor = connection.cursor()
+
+        cursor.execute(
+            "SELECT 1 FROM routes WHERE route_id = %s",
+            (route_id,)
+        )
+
+        if cursor.fetchone() is None:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Route {route_id} not found"
+            )
 
         cursor.execute("""
             WITH route_trips AS (
