@@ -1,12 +1,13 @@
 from fastapi import APIRouter, HTTPException
 from src.database.connection import get_connection
+from src.models.analytics import RouteStatistics, TripsByHour, BusiestStop, TripsPerRoute
 
 router = APIRouter(
     prefix="/analytics",
     tags=["Analytics"]
 )
 
-@router.get("/trips-per-route")
+@router.get("/trips-per-route", response_model=list[TripsPerRoute])
 def trips_per_route():
 
     connection = get_connection()
@@ -45,7 +46,7 @@ def trips_per_route():
     finally:
         connection.close()
 
-@router.get("/busiest-stops")
+@router.get("/busiest-stops", response_model=list[BusiestStop])
 def busiest_stops():
 
     connection = get_connection()
@@ -82,7 +83,7 @@ def busiest_stops():
     finally:
         connection.close()
 
-@router.get("/trips-by-hour")
+@router.get("/trips-by-hour", response_model=list[TripsByHour])
 def trips_by_hour():
 
     connection = get_connection()
@@ -123,7 +124,7 @@ def trips_by_hour():
     finally:
         connection.close()
 
-@router.get("/routes/{route_id}")
+@router.get("/routes/{route_id}", response_model=RouteStatistics)
 def route_statistics(route_id: str):
 
     connection = get_connection()
