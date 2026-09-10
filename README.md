@@ -2,6 +2,9 @@
 
 A backend API for analyzing public transit data using **GTFS**, **FastAPI**, and **PostgreSQL**. The project extracts and transforms GTFS data, loads it into Supabase PostgreSQL, and provides REST endpoints for accessing transit information and running SQL-based analytics.
 
+**Live API**: https://transittracer.onrender.com
+**API Documentation**: https://transittracer.onrender.com/docs
+
 ## Features
 
 * GTFS data extraction and transformation
