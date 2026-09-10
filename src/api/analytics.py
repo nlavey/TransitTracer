@@ -107,6 +107,7 @@ def trips_by_hour():
                 COUNT(*) AS trip_count
             FROM first_stops
             WHERE stop_rank = 1
+            AND CAST(SPLIT_PART(departure_time, ':', 1) AS INTEGER) BETWEEN 0 AND 23
             GROUP BY hour
             ORDER BY hour;
         """)
